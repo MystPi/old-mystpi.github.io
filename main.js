@@ -88,6 +88,25 @@ class CommandPrompt {
   }
 
   wait = (timeout) => new Promise((resolve, reject) => setTimeout(resolve, timeout));
+  
+  async fromArray(arr) {
+    for (let i = 0; i < arr.length; i++) {
+      let e = arr[i];
+      if (e.type == 'write') {
+        await this.write(e.text, e.options?.timeout, e.options?.wait);
+      } else if (e.type === 'output') {
+        this.output(e.text);
+      } else if (e.type === 'tree') {
+        this.tree(e.dir, e.data);
+      } else if (e.type === 'newLine') {
+        this.newLine();
+      } else if (e.type === 'changeDir') {
+        this.dir = e.dir;
+      } else if (e.type === 'do') {
+        await e.func();
+      }
+    }
+  }
 }
 
 
@@ -97,57 +116,119 @@ async function main() {
 
   const prompt = new CommandPrompt();
 
-  await prompt.write('cd profile');
-  prompt.dir = '~/profile';
-
-  prompt.newLine();
-  await prompt.write('cat aboutMe.txt');
-  prompt.output(mystpi.bio);
-
-  prompt.newLine();
-  await prompt.write('view profilePicture.png');
-  
-  const img = document.createElement('img');
-  img.src = mystpi.avatar_url;
-  img.width = 100;
-  img.height = 100;
-  img.alt = 'profile picture';
-  document.body.appendChild(img);
-
-  prompt.newLine();
-  await prompt.write('tree sites');
-  prompt.tree('./sites/', [
+  const data = [
     {
-      name: 'Home'
+      type: 'write',
+      text: 'cd profile'
     },
     {
-      name: 'Blog',
-      url: '/blog'
+      type: 'changeDir',
+      dir: '~/profile'
     },
     {
-      name: 'GitHub',
-      url: 'https://github.com/MystPi'
+      type: 'newLine'
     },
     {
-      name: 'Scratch', url: 'https://scratch.mit.edu/users/NFlex23'
+      type: 'write',
+      text: 'cat aboutMe.txt'
+    },
+    {
+      type: 'output',
+      text: mystpi.bio
+    },
+    {
+      type: 'newLine'
+    },
+    {
+      type: 'write',
+      text: 'view profilePicture.png'
+    },
+    {
+      type: 'do',
+      func() {
+        const img = document.createElement('img');
+        img.src = mystpi.avatar_url;
+        img.width = 100;
+        img.height = 100;
+        img.alt = 'profile picture';
+        document.body.appendChild(img);
+      }
+    },
+    {
+      type: 'newLine'
+    },
+    {
+      type: 'write',
+      text: 'tree sites'
+    },
+    {
+      type: 'tree',
+      dir: './sites/',
+      data: [
+        {
+          name: 'Home'
+        },
+        {
+          name: 'Blog',
+          url: '/blog'
+        },
+        {
+          name: 'GitHub',
+          url: 'https://github.com/MystPi'
+        },
+        {
+          name: 'Scratch', url: 'https://scratch.mit.edu/users/NFlex23'
+        }
+      ]
+    },
+    {
+      type: 'newLine'
+    },
+    {
+      type: 'write',
+      text: 'cd repos'
+    },
+    {
+      type: 'changeDir',
+      dir: '~/profile/repos'
+    },
+    {
+      type: 'newLine'
+    },
+    {
+      type: 'write',
+      text: 'ls | progress --to 30'
+    },
+    {
+      type: 'output',
+      text: `${repos.length}/30\n${Math.round(repos.length / 30 * 100)}%`
+    },
+    {
+      type: 'newLine'
+    },
+    {
+      type: 'write',
+      text: 'tree'
+    },
+    {
+      type: 'tree',
+      dir: './repos/',
+      data: repos.map(repo => ({name: repo.name, url: repo.html_url}))
+    },
+    {
+      type: 'newLine'
+    },
+    {
+      type: 'write',
+      text: 'exit'
+    },
+    {
+      type: 'output',
+      text: 'logout'
     }
-  ]);
+  ];
 
-  prompt.newLine();
-  await prompt.write('cd repos');
-  prompt.dir = '~/profile/repos';
-
-  prompt.newLine();
-  await prompt.write('ls | progress --to 30');
-  prompt.output(`${repos.length}/30\n${Math.round(repos.length / 30 * 100)}%`);
-
-  prompt.newLine();
-  await prompt.write('tree');
-  prompt.tree('./repos/', repos.map(repo => ({name: repo.name, url: repo.html_url})));
-
-  prompt.newLine();
-  await prompt.write('exit');
-  prompt.output('logout');
+  await prompt.fromArray(data);
 }
 
 
