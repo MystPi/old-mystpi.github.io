@@ -116,7 +116,7 @@ async function main() {
 
   prompt.newLine();
   await prompt.write('tree sites');
-  prompt.tree('~/sites', [
+  prompt.tree('./sites/', [
     {
       name: 'Home'
     },
