@@ -177,7 +177,8 @@ async function main() {
           url: 'https://github.com/MystPi'
         },
         {
-          name: 'Scratch', url: 'https://scratch.mit.edu/users/NFlex23'
+          name: 'Scratch',
+          url: 'https://scratch.mit.edu/users/NFlex23'
         }
       ]
     },
