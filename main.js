@@ -88,7 +88,7 @@ class CommandPrompt {
   }
 
   wait = (timeout) => new Promise((resolve, reject) => setTimeout(resolve, timeout));
-  
+
   async fromArray(arr) {
     for (let i = 0; i < arr.length; i++) {
       let e = arr[i];
