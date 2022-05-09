@@ -198,11 +198,11 @@ async function main() {
     },
     {
       type: 'write',
-      text: 'ls | progress --to 30'
+      text: 'ls | progress --to 50'
     },
     {
       type: 'output',
-      text: `${repos.length}/30\n${Math.round(repos.length / 30 * 100)}%`
+      text: `${repos.length}/50\n${Math.round(repos.length / 50 * 100)}%`
     },
     {
       type: 'newLine'
