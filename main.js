@@ -1,9 +1,9 @@
 class CommandPrompt {
-  constructor(options) {
-    this.user = options?.user || 'mystpi';
-    this.host = options?.host || 'laptop';
-    this.dir = options?.dir || '~/';
-    this.cursorStyle = options?.cursor || '█';
+  constructor({ user = 'mystpi', host = 'laptop', dir = '~/', cursor = '█' }) {
+    this.user = user;
+    this.host = host;
+    this.dir = dir;
+    this.cursorStyle = cursor;
 
     this.newLine();
   }
