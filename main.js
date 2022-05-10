@@ -1,5 +1,5 @@
 class CommandPrompt {
-  constructor({ user = 'mystpi', host = 'laptop', dir = '~/', cursor = '█' }) {
+  constructor({ user = 'mystpi', host = 'laptop', dir = '~/', cursor = '█' } = {}) {
     this.user = user;
     this.host = host;
     this.dir = dir;
